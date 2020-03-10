@@ -11,12 +11,12 @@ path = os.path.dirname(__file__)
 
 class BaseConfig(object):
     SECRET_KEY = os.getenv("SECRET_KEY", "kerman blog")
-    DEFAULT_ADMIN_PASSWORD = "18652411"
+    DEFAULT_ADMIN_PASSWORD = "xxxxxx"
     BLOG_PER_PAGE = 10
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True
     WHOOSHEE_MIN_STRING_LEN = 2
-    ADMIN_EMAIL = 'mianghong@gmail.com'
+    ADMIN_EMAIL = '1328566866j@gmail.com'
     MAIL_USE_SSL = True
     MAIL_PORT = 465
     MAIL_DEFAULT_SENDER = os.getenv('FLASK_MAIL_SENDER')
@@ -40,11 +40,11 @@ class ProductionConfig(BaseConfig):
         SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "")
         # print(SQLALCHEMY_DATABASE_URI)
     else:
-        SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:18652411ji@localhost/kerman?charset=utf8"
+        SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:xxxxxxx@localhost/xxx?charset=utf8"
 
 
 class DevelopConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:18652411ji@localhost/kerman?charset=utf8"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:xxxxxxxx@localhost/xxxx?charset=utf8"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 
