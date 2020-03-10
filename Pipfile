@@ -1,0 +1,40 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+verify_ssl = true
+
+[packages]
+requests = "*"
+flask = "*"
+flask-assets = "*"
+flask-babel = "*"
+flask-moment = "*"
+flask-login = "*"
+faker = "*"
+sqlalchemy = "*"
+python-slugify = "*"
+flask-whooshee = "*"
+flask-sqlalchemy = "*"
+flask-cors = "*"
+pymysql = "*"
+marko = "*"
+flask-migrate = "*"
+pyyaml = "*"
+six = "*"
+gunicorn = "*"
+cssmin = "*"
+jsmin = "*"
+qcloud-python-sts = "*"
+slugify = "*"
+cryptography = "*"
+alembic = "*"
+babel = "*"
+
+[dev-packages]
+flask-shell-ipython = "*"
+flake8 = "*"
+mypy = "*"
+appnope = "*"
+
+[requires]
+python_version = "3.7"
