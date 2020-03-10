@@ -1,0 +1,88 @@
+# Chinese (Simplified, China) translations for PROJECT.
+# Copyright (C) 2017 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2019-08-21 15:43+0800\n"
+"PO-Revision-Date: 2017-09-10 11:03+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_Hans_CN\n"
+"Language-Team: zh_Hans_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.7.0\n"
+
+#: flaskblog/app.py:37
+msgid "Please login"
+msgstr "请先登录"
+
+#: flaskblog/templates/404.html:538
+msgid "Return Home"
+msgstr "回到主页"
+
+#: flaskblog/templates/index.html:15
+msgid "Blog"
+msgstr "博客"
+
+#: flaskblog/templates/index.html:16
+msgid "About"
+msgstr "关于"
+
+#: flaskblog/templates/index.html:35 flaskblog/templates/index.html:64
+msgid "Category"
+msgstr "分类"
+
+#: flaskblog/templates/index.html:37
+msgid "Tag"
+msgstr "标签"
+
+#: flaskblog/templates/index.html:53
+msgid "Newer Posts"
+msgstr "较新文章"
+
+#: flaskblog/templates/index.html:57
+msgid "Older Posts"
+msgstr "较旧文章"
+
+#: flaskblog/templates/index.html:76
+msgid "Tags"
+msgstr "标签"
+
+#: flaskblog/templates/index.html:85
+msgid "Links"
+msgstr "链接"
+
+#: flaskblog/templates/post.html:30
+msgid "TABLE OF CONTENTS"
+msgstr "目录"
+
+#: flaskblog/templates/post.html:58
+msgid "Last edited"
+msgstr "最后编辑于"
+
+#: flaskblog/templates/post.html:62
+msgid "Post Link"
+msgstr "文章链接"
+
+#: flaskblog/templates/post.html:63
+msgid "This work is licensed under a "
+msgstr "本作品采用"
+
+#: flaskblog/templates/post.html:63
+msgid " License. "
+msgstr "许可。"
+
+#: flaskblog/templates/post.html:68
+msgid "RELATED POST"
+msgstr "相关文章"
+
+#: flaskblog/templates/search.html:3 flaskblog/templates/search.html:6
+#, python-format
+msgid "Search Result for '%(word)s'"
+msgstr "'%(word)s'的搜索结果"

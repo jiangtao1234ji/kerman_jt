@@ -1,0 +1,160 @@
+{% macro disqus(page) %}
+<section class="comments">
+    <div id="disqus_thread"></div>
+</section>
+
+<script>
+    disqus_shortname = '{{integration.disqus.shortname}}';
+    disqus_page_url = '{{request.url}}'; // optional
+    disqus_page_title = '{{page.title}}'; // optional
+
+</script>
+<script src="//a.typcdn.com/embed/disqus.js"></script>
+{% endmacro %}
+
+{% macro render_comment_item(item, is_top=True) %}
+<div class="media">
+    <img class="gravatar mr-2" src="{{item.author.avatar}}" class="mr-3" alt="{{item.author.display_name}}">
+    <div class="media-body">
+        <div>
+            <div class="float-right">
+                <span class="comment-hidden d-lg-none">
+                    <a href="#native-comment" data-id="{{item.id}}" data-author="{{item.author.display_name}}">{{_('Reply')}}</a>
+                </span>
+                {% if is_top-%}<a href="#blog-comment-{{item.floor}}"># {{item.floor}}</a>{%-endif %}
+            </div>
+            {%-if item.author.is_admin-%}<span class="text-success">({{ _('Admin') }})</span>{%-endif-%}
+            {%-if item.parent-%}<span class="ml-1 fa fa-share"> @{{ item.parent.author.display_name }}</span>{%-endif-%}
+        </div>
+        <time datetime="{{item.time}}">{{moment(item.time).fromNow()}}</time>
+        <div class="comment-body mt-2">
+            {{ item.html|safe }}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_comments(blog, items, count) %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<link rel="stylesheet" href="https://sststatic.vicz.cn/wp-content/themes/kratos/css/bootstrap.min.css?ver=3.3.7">
+<link rel="stylesheet" href="https://sststatic.vicz.cn/wp-content/themes/kratos/style.css?ver=2.6">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<section class="comments" id="native-comment">
+    <div class="mb-4">
+        {% if not current_user.is_authenticated %}
+        <div class="bg-light text-center p-4">
+            <p>{{_('Please login before comment. Email addresses are not publicly available.')}}</p>
+            <form role="login">
+                <div class="comment-form-author form-group has-feedback">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                        <input class="form-control" placeholder="{{_('Username(Required)')}}" id="author" name="author"
+                               type="text" value=""
+                               size="30">
+                    </div>
+                </div>
+                <div class="comment-form-email form-group has-feedback">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-envelope-o"></i></div>
+                        <input class="form-control" placeholder="{{_('Email(Required)')}}" id="email" name="email"
+                               type="text" value="" size="30">
+                    </div>
+                </div>
+                <div class="comment-form-url form-group has-feedback">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-link"></i></div>
+                        <input class="form-control" placeholder="{{_('Website(Optional)')}}" id="url" name="url"
+                               type="text"
+                               value="" size="30">
+                    </div>
+                </div>
+                <p class="form-submit"><input name="submit" type="submit" id="submit" class="btn btn-primary"
+                                              value="Login">
+                    <input type="hidden" name="comment_blog_ID" value="2039" id="comment_blog_ID">
+                    <input type="hidden" name="comment_parent" id="comment_parent" value="0">
+                </p>
+            </form>
+            <div>
+                <span class="d-sm-block d-lg-inline">{{_('Or login with')}}</span>
+                <a href="{{url_for('auth.github_login')}}" class="btn btn-primary"><i class="fa fa-github"></i>
+                    GitHub</a>
+                <a href="{{url_for('auth.google_login')}}" class="btn btn-primary"><i class="fa fa-google"></i>
+                    Google</a>
+            </div>
+        </div>
+        {% else %}
+        <form role="comment">
+            <input type="hidden" name="blog_id" value="{{blog.id}}">
+            <input type="hidden" name="parent_id" value="">
+            <textarea name="content" placeholder="{{_('Type with markdown syntax')}}"></textarea>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <strong>{{ current_user.display_name }}</strong>
+                    {%-if current_user.is_admin-%}
+                    <span class="text-success">({{ _('Admin') }})</span>
+                    {%-endif-%}
+                    <button class="btn btn-light btn-sm ml-2 d-none" type="button" name="reply"><i
+                            class="fa fa-share"></i>@<span
+                            id="reply-to"></span></button>
+                </div>
+                <button class="btn btn-primary" type="submit" name="comment">{{_('Comment')}}</button>
+            </div>
+        </form>
+        <script>
+            var simplemde = new SimpleMDE({spellChecker: false});
+
+        </script>
+        {% endif %}
+    </div>
+    <div>
+        <div>{{ngettext('%(num)d comment', '%(num)d comments', count)}}</div>
+        {% for item in items %}
+        <div class="comment-item py-4" id="blog-comment-{{item.floor}}">
+            {{ render_comment_item(item) }}
+            {% for child in item.children %}
+            <div class="comment-item py-2 ml-4 ml-lg-5">
+                {{ render_comment_item(child, False) }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+    $(function () {
+        $('form[role=login]').submit(function (e) {
+            e.preventDefault();
+            fetch('/auth/login', {
+                method: 'post',
+                body: new FormData(this)
+            }).then(_ => {
+                location.reload();
+            });
+        });
+
+        $('form[role=comment]').submit(function (e) {
+            e.preventDefault();
+            fetch('/comment', {
+                method: 'post',
+                body: new FormData(this)
+            }).then(_ => {
+                location.reload();
+            });
+        });
+
+        $('[data-author]').click(function () {
+            $('#reply-to').text($(this).data('author')).parent().removeClass('d-none');
+            $('input[name=parent_id]').val($(this).data('id'));
+        });
+        $('#reply-to').parent().click(function () {
+            $(this).addClass('d-none');
+            $('#reply-to').text('');
+            $('input[name=parent_id]').val('');
+            return false;
+        })
+    });
+
+</script>
+
+{% endmacro %}

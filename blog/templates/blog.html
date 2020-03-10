@@ -1,0 +1,123 @@
+{% extends '_page.html' %}
+{% from 'partials/comments.html' import disqus with context %}
+{% from 'partials/comments.html' import render_comments with context %}
+
+{% block lang %}{{blog.lang}}{% endblock %}
+{% block title %}{{blog.title}}{% endblock %}
+{% block ogtype %}article{% endblock %}
+{% block description %}{%-if blog.description %}{{blog.description}}{%-endif %}{% endblock %}
+{% block ogimg %}{%-if blog.image %}{{blog.image}}{%-endif %}{% endblock %}
+{% block extracss %}
+<meta name="weibo:article:create_at" content="{{blog.date|date('%Y-%m-%dT%H:%M:%SZ')}}">
+<meta name="weibo:article:update_at" content="{{blog.last_update|date('%Y-%m-%dT%H:%M:%SZ')}}">
+<meta name="keywords" content="{{blog.tags|join(', ', 'text')}}">
+<meta name="author" content="{{blog.author}}">
+<meta itemscope="" itemprop="pageEntity" itemtype="https://schema.org/WebPage" itemid="{{request.url}}">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.2/dist/photoswipe.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.2/dist/default-skin/default-skin.css">
+<script src="https://cdn.staticfile.org/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
+
+{% block center_col %}col-lg-9{% endblock %}
+{% block right_col %}col-lg-3{% endblock %}
+
+{% block coverstyle %}
+{% if blog.image %}data-bg="url({{blog.image}})"{% endif %}
+{% endblock %}
+
+{% block rightside %}
+{% if blog.toc %}
+<div class="blog-toc sticky-top">
+    <div class="toc-head">
+        {{_('TABLE OF CONTENTS')}}
+    </div>
+    {{ blog.toc | safe }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<article itemscope itemtype="http://schema.org/Article">
+    <div itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+        <meta itemprop="url" content="{{ blog.image }}">
+    </div>
+    <div class="d-lg-flex justify-content-between align-items-center">
+        <div class="blog-meta">
+            <time datetime="{{blog.date}}" itemprop="datePublished">{{ moment(blog.date).format('ll') }}</time>
+            {% if blog.author %}
+            <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <span class="blog-author" itemprop="name">{{blog.author}}</span>
+            </span>
+            {% endif %}
+        </div>
+        <meta itemprop="keywords" content="{{ blog.tags|map(attribute='text')|join(',') }}">
+        <div class="blog-tags">
+            {% for tag in blog.tags %}
+            <a href="{{tag.url}}">{{tag.text}}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <h1 class="blog-title" itemprop="title">{{blog.title}}</h1>
+    <div class="blog-subtitle" itemprop="subtitle">{% if blog.description %}{{blog.description}}{% endif %}</div>
+    <div class="blog-text yue" itemprop="content">
+        {{ blog.html | safe }}
+    </div>
+    <div class="blog-tail">
+        {{_('Last edited')}}
+        <time datetime="{{blog.last_update}}">{{moment(blog.last_update).fromNow()}}</time>
+    </div>
+    <meta itemprop="license" content="http://creativecommons.org/licenses/by-sa/4.0/">
+</article>
+<div class="cc text-center p-2 yue">
+    <div id="copyright">{{_('Blog Link')}}: <a href="{{request.url}}">{{request.url}}</a><br/>
+        <i class="fa fa-cc"></i> {{_('This work is released under ')}}<a rel="license"
+            href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA</a>{{_(' License. ')}}
+    </div>
+    {% if g.site.donate %}
+    <div>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#donate-qrcode"
+                aria-expanded="false" aria-controls="donate-qrcode">
+            <i class="fa fa-heart"></i> {{_('Donate')}}
+        </button>
+    </div>
+    <div id="donate-qrcode" class="collapse"><img src="{{ g.site.donate }}"></div>
+    {% endif %}
+
+</div>
+{% set related = blog.related_blog() %}
+{% if related %}
+<section class="related">
+    <div class="related-title">{{_('RELATED blog')}}</div>
+    <div class="blog-item-content">
+        <a href="{{related.url}}">
+            <h4 class="blog-item-title">{{related.title}}</h4>
+        </a>
+        {% if related.description %}
+        <a href="{{related.url}}">
+            <p class="blog-item-subtitle lead">{{related.description}}</p>
+        </a>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+{% if not config.DEBUG and blog.comment and integration.disqus and integration.disqus.enabled %}
+{{ disqus(blog) }}
+{% endif %}
+{% if blog.comment and integration.comment %}
+{{ render_comments(blog, comments, comments_count) }}
+{% endif %}
+{% endblock %}
+
+{% block additional %}
+{% include 'partials/pswp.html' %}
+<a id="totop" title="Return to the top" class="invisible" href="javascript:void(0)"><i class="fa fa-fw fa-arrow-up"></i></a>
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-574571fdae7f0521"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.2/dist/photoswipe.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.2/dist/photoswipe-ui-default.min.js" charset="utf-8"></script>
+{% include 'partials/math.html' %}
+{% endblock %}

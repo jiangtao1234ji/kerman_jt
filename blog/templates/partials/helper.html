@@ -1,0 +1,31 @@
+{% macro render_blogs(blogs) %}
+  {% for blog in blogs|sort(True, attribute='date') %}
+  <div class="blog-info d-flex align-items-center justify-content-between" data-type="article">
+    <div flex="1">
+      <div class="blog-meta">
+        <time datetime="{{blog.date}}">{{ moment(blog.date).format('ll') }}</time>
+        {% if blog.category %}
+          <a class="blog-cat" href="{{url_for('category', cat_id=blog.category.id)}}"><i class="fa fa-folder-open"></i> {{blog.category}}</a>
+        {% endif %}
+      </div>
+      <div class="blog-item-content">
+        <a href="{{blog.url}}">
+          <h3 class="blog-item-title">{{blog.title}}</h3>
+        </a>
+        {% if blog.description %}
+        <a href="{{blog.url}}">
+          <p class="blog-item-subtitle lead">{{blog.description}}</p>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    {% if blog.image %}
+      <div class="blog-item-image">
+        <a href="{{blog.url}}">
+          <figure class="lazy" data-bg="url({{blog.image}})"></figure>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+{% endmacro %}
