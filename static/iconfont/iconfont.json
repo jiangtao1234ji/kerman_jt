@@ -1,0 +1,16 @@
+{
+  "id": "1484225",
+  "name": "kerman",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "11548862",
+      "name": "favicon",
+      "font_class": "favicon",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    }
+  ]
+}
