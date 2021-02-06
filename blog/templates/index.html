@@ -69,7 +69,7 @@ style="background-image:url({{g.site.cover_url}});"
         <li>
             <i class="fa fa-caret-right"></i>
             <a class="btn btn-light" href="{{url_for('category', cat_id=item.id)}}">{{_(item.text)|title}} <span
-                    class="badge badge-dark">{{item.blogs.count()}}</span></a>
+                    class="badge badge-dark">{{item.blogs.filter_by(is_draft=False).count()}}</span></a>
         </li>
         {% endfor %}
     </ul>

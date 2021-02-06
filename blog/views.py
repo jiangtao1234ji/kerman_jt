@@ -56,6 +56,7 @@ def tag(text: str) -> str:
     blogs = (
         Blog.query.join(Blog.tags)
             .filter(Tag.text == tag.text)
+            .filter(~Blog.is_draft)
             .order_by(Blog.date.desc())
     )
     tag_cloud = get_tag_cloud()
@@ -64,8 +65,9 @@ def tag(text: str) -> str:
 
 def category(cat_id: int) -> str:
     cat = Category.query.get(cat_id)
-    blogs = cat.blogs
+    blogs = cat.blogs.filter(~Blog.is_draft)
     tag_cloud = get_tag_cloud()
+
     return render_template("index.html", blogs=blogs, tag_cloud=tag_cloud, cat=cat)
 
 
