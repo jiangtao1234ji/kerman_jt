@@ -20,6 +20,7 @@
 {% endif %}
 {% endblock %}
 
+
 {% block coverstyle %}
 style="background-image:url({{g.site.cover_url}});"
 {% endblock %}
@@ -104,7 +105,7 @@ style="background-image:url({{g.site.cover_url}});"
 {% block extrajs %}
 <script type="text/javascript">
     if ($('#tag-cloud').length !== 0) {
-        async('https://cdn.frostming.com/color-hash/color-hash.js', function () {
+        async('https://github.com/zenozeng/color-hash/blob/master/dist/color-hash.js', function () {
             var colorHash = new ColorHash({saturation: 0.5});
             $('#tag-cloud > a').each(function (i, e) {
                 e.style["background-color"] = colorHash.hex(e.innerHTML.trim());
