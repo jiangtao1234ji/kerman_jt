@@ -119,10 +119,8 @@ def articles() -> str:
     def grouper(item):
         return item.date.year, item.date.month
 
-    result = groupby(Blog.query.order_by(Blog.date.desc()), grouper)
+    result = groupby(Blog.query.filter_by(is_draft=False).order_by(Blog.date.desc()), grouper)
     return render_template("articles.html", items=result, tag_cloud=get_tag_cloud())
-
-
 
 
 def init_app(app: Flask) -> None:
